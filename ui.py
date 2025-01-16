@@ -1,0 +1,105 @@
+import customtkinter as ctk
+from CTkColorPicker import *
+import numpy as np
+
+class Create_Object():
+    def __init__(self):
+        self.width, self.height = 800, 600
+        self.title = 'Create an Object'
+
+        self.obj = []
+
+        self.pad_y = 20
+        self.pad_x = 20
+
+        self.densities = {'Caoutchouc': 1500, 'Steel': 7800, 'Glass': 2500, 'Stone': 2400, 'Wood': 600, 'Helium': 0.5, 'Ice': 900, 'Gold': 19300} #g/L
+        self.restitutions = {'Caoutchouc': 0.8, 'Steel': 0.8, 'Glass': 0.5, 'Stone': 0.2, 'Wood': 0.4, 'Helium': 0.3, 'Ice': 0.05, 'Gold': 0.1} 
+        self.frictions = {'Caoutchouc': 0.8, 'Steel': 0.8, 'Glass': 0.5, 'Stone': 0.2, 'Wood': 0.4, 'Helium': 0.3, 'Ice': 0.05, 'Gold': 0.1}
+
+        self.args = {'material': 'Custom Material'}
+
+    def ask_color(self):
+        pick_color = AskColor()
+        color = pick_color.get()
+        color = (int(color[1:3], base=16), int(color[3:5], base=16), int(color[5:7], base=16))
+        self.args['color'] = color
+
+    def ask_material(self, event):
+        from scripts.askmaterial import AskMaterial
+        self.args['material'] = self.obj[5].get()
+        if self.obj[5].get() == 'Cutom Material':
+            pick_material = AskMaterial()
+            pick_material.custom_material()
+            self.args['density'] = pick_material.density
+            self.args['restitution'] = pick_material.restitution
+            self.args['friction'] = pick_material.friction
+
+    def ask_shape(self, event):
+        from scripts.askshape import AskShape
+        shape = self.obj[3].get().lower()
+        self.args['shape'] = shape
+        pick_shape = AskShape(shape=shape)
+        pick_shape.draw_shape()
+        if pick_shape.is_submitted:
+            self.args['vertices'] = pick_shape.vertices
+        
+    def submit(self):
+        try:
+            if self.args['material'] != 'Custom Material':
+                self.args['density'] = self.densities[self.args['material']]
+                self.args['restitution'] = self.restitutions[self.args['material']]
+                self.args['friction'] = self.frictions[self.args['material']]
+                
+            self.drag_coeffs = {'polygon': 0.9, 'rectangle': 1, 'circle': 0.5}
+            self.args['drag coeff'] = self.drag_coeffs[self.args['shape']]
+        except:
+            print('wrong material informations')
+
+        
+        if all(i in list(self.args.keys()) for i in ['shape', 'density', 'restitution', 'friction', 'vertices', 'shape', 'color']):
+            self.root.quit()
+            self.root.after(100, self.root.destroy)
+        else:
+            print('error while creating object, maybe you forgot to input arguments')
+
+    def cancel(self):
+        self.args = 'cancel'
+
+        self.root.quit()
+        self.root.after(100, self.root.destroy)
+
+    def run(self):
+        self.root = ctk.CTk()
+        self.root.title(self.title)
+        self.root.geometry(f'{self.width}x{self.height}')
+        self.root.resizable(False, False)
+        ctk.set_appearance_mode('dark')
+
+        self.obj.append(ctk.CTkLabel(self.root, text='Object Shape:', font=('Arial', 20), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=0, column=0, pady=self.pad_y, padx=self.pad_x)
+        self.obj.append(ctk.CTkLabel(self.root, text='Object Color:', font=('Arial', 20), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=1, column=0, pady=self.pad_y, padx=self.pad_x)
+        self.obj.append(ctk.CTkLabel(self.root, text='Object Material:', font=('Arial', 20), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=2, column=0, pady=self.pad_y, padx=self.pad_x)
+
+        self.obj.append(ctk.CTkComboBox(self.root, font=('Arial', 20), values=["Circle", "Rectangle", "Polygon"], corner_radius=16, border_width=5, command=self.ask_shape, hover=True))
+        self.obj[-1].grid(row=0, column=1, pady=self.pad_y, padx=self.pad_x)
+        self.obj.append(ctk.CTkButton(self.root, text='Choose Color', font=('Arial', 20), corner_radius=16, command=self.ask_color))
+        self.obj[-1].grid(row=1, column=1, pady=self.pad_y, padx=self.pad_x)
+        self.obj.append(ctk.CTkComboBox(self.root, font=('Arial', 20), values=["Caoutchouc", "Steel", "Glass", "Stone", "Wood", "Helium", "Ice", "Gold", "Cutom Material"], 
+                                        corner_radius=16, border_width=5, hover=True, command=self.ask_material))
+        self.obj[-1].grid(row=2, column=1, pady=self.pad_y, padx=self.pad_x)
+
+        self.obj.append(ctk.CTkButton(self.root, text='Submit', font=('Arial', 20), corner_radius=16, command=self.submit))
+        self.obj[-1].grid(row=5, column=1, pady=self.pad_y, padx=self.pad_x)
+        self.obj.append(ctk.CTkButton(self.root, text='Cancel', font=('Arial', 20), corner_radius=16, command=self.cancel))
+        self.obj[-1].grid(row=5, column=0, pady=self.pad_y, padx=self.pad_x)
+
+        self.root.mainloop()
+
+
+
+if __name__ == '__main__':
+    window = Create_Object()
+    window.run()
+    print(window.args)
