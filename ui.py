@@ -160,7 +160,12 @@ class App_parameters:
         self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5))
         self.obj[-1].grid(row=6, column=1, pady=20, padx=20)
 
-
+        self.obj.append(ctk.CTkLabel(self.root, text='s^-1', font=('Arial', 20), corner_radius=16))
+        self.obj[-1].grid(row=1, column=2, pady=20, padx=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='g/L', font=('Arial', 20), corner_radius=16))
+        self.obj[-1].grid(row=2, column=2, pady=20, padx=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='m/s^2', font=('Arial', 20), corner_radius=16))
+        self.obj[-1].grid(row=6, column=2, pady=20, padx=20)
 
         self.obj.append(ctk.CTkButton(self.root, text='Submit', font=('Arial', 20), corner_radius=16, command=self.submit))
         self.obj[-1].grid(row=3, column=1, pady=20, padx=20)
