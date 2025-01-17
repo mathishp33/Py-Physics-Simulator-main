@@ -96,6 +96,7 @@ class Create_Object():
 
         self.root.mainloop()
 
+
 class App_parameters:
     def __init__(self, args):
         self.background_color = args['bg']
@@ -126,10 +127,24 @@ class App_parameters:
 
         self.obj.append(ctk.CTkLabel(self.root, text='Background Color:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
         self.obj[-1].grid(row=0, column=0, padx=20, pady=20)
-        self.obj.append(ctk.CTkLabel(self.root, text='Background Color:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
-        self.obj[-1].grid(row=0, column=0, padx=20, pady=20)
-        self.obj.append(ctk.CTkLabel(self.root, text='Background Color:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
-        self.obj[-1].grid(row=0, column=0, padx=20, pady=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='Images per sec. :', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=1, column=0, padx=20, pady=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='Air Density:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=2, column=0, padx=20, pady=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='Allow Dragging:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=3, column=0, padx=20, pady=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='Allow Collisions:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=4, column=0, padx=20, pady=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='Gravity Acceleration:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=5, column=0, padx=20, pady=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='Allow Gravity:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=6, column=0, padx=20, pady=20)
+
+        self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5))
+        self.obj[-1].grid(row=1, column=1, pady=20, padx=20)
+
+
+        self.root.mainloop()
     
 
 if __name__ == '__main__':
