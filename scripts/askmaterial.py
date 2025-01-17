@@ -33,6 +33,9 @@ class AskMaterial():
         self.obj.append(ctk.CTkButton(self.root, text='Cancel', font=('Arial', 20), corner_radius=16, command=self.stop))
         self.obj[-1].grid(row=3, column=0, pady=20, padx=20)
 
+        self.obj.append(ctk.CTkLabel(self.root, text = 'g/L | g/dm^3', font=('Arial', 20)))
+        self.obj[-1].grid(row=0, column=2, pady=20, padx=20)
+
         self.root.mainloop()
 
     def custom_meterial_end(self):
