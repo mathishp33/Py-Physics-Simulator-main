@@ -57,18 +57,20 @@ class Create_Object():
 
         
         if all(i in list(self.args.keys()) for i in ['shape', 'density', 'restitution', 'friction', 'vertices', 'shape', 'color']):
-            self.root.quit()
-            self.root.after(100, self.root.destroy)
+            self.stop()
         else:
             print('error while creating object, maybe you forgot to input arguments')
 
     def cancel(self):
         self.args = 'cancel'
+        self.stop()
 
+    def stop(self):
         self.root.quit()
-        self.root.after(100, self.root.destroy)
+        self.root.destroy()
 
     def run(self):
+
         self.root = ctk.CTk()
         self.root.title(self.title)
         self.root.geometry(f'{self.width}x{self.height}')

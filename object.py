@@ -12,22 +12,19 @@ class RigidBody():
         self.shape = args['shape'] if args['shape'] != 'rectangle' else 'polygon'
 
         if self.shape == 'polygon':
-            self.untouched_vertices = np.array([(50, 50), (-50, 50), (-50, -50), (50, -50)])
+            self.untouched_vertices = args['vertices']
 
+        a = 0
         if self.shape == 'polygon':
             for i in range(len(self.untouched_vertices)):
-                j=i+1
-                if j > len(self.untouched_vertices)-1:
-                    j = 0
+                j=(i + 1) % len(self.untouched_vertices)
                 a += self.untouched_vertices[i][0]*self.untouched_vertices[j][1] - self.untouched_vertices[j][0]*self.untouched_vertices[i][1]
-            a = 0.5*a
-            self.aera = a
-            print(a)
-
+            self.aera = 0.5*abs(a)
         elif self.shape == 'circle':
             self.radius = args['vertices']
             self.width = self.radius*2 #cm
             self.aera = np.pi*self.radius**2*10**-4 #m^2
+
         self.volume = self.aera*0.01 #m^3
         self.density = args['density'] #g/L
 

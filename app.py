@@ -20,7 +20,7 @@ class App:
         self.drag = True
         self.collision = True
         self.g = 9.81
-        self.gravity = True
+        self.gravity = False
 
         self.interacting_ = False
         self.tool = 'dragging'
@@ -80,7 +80,8 @@ class App:
                         self.external_ui = ui.Create_Object()
                         self.external_ui.run()
                         args = self.external_ui.args
-                        self.rigid_bodies.append(RigidBody(x, y, len(self.rigid_bodies), args))
+                        if not args == 'cancel':
+                            self.rigid_bodies.append(RigidBody(x, y, len(self.rigid_bodies), args))
 
     def UI(self):
         pg.draw.rect(self.screen, (0, 0, 0), (0, 0, self.WIDTH, 100))
