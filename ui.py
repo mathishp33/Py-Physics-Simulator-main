@@ -1,6 +1,5 @@
 import customtkinter as ctk
 from scripts.CTkColorPicker import *
-import numpy as np
 
 class Create_Object():
     def __init__(self):
@@ -118,6 +117,12 @@ class App_parameters:
     def stop(self):
         self.root.quit()
         self.root.destroy()
+
+    def ask_color(self):
+        pick_color = AskColor()
+        color = pick_color.get()
+        color = (int(color[1:3], base=16), int(color[3:5], base=16), int(color[5:7], base=16))
+        self.background_color = color
     
     def run(self):
         self.root = ctk.CTk()
@@ -135,14 +140,32 @@ class App_parameters:
         self.obj[-1].grid(row=3, column=0, padx=20, pady=20)
         self.obj.append(ctk.CTkLabel(self.root, text='Allow Collisions:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
         self.obj[-1].grid(row=4, column=0, padx=20, pady=20)
-        self.obj.append(ctk.CTkLabel(self.root, text='Gravity Acceleration:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
-        self.obj[-1].grid(row=5, column=0, padx=20, pady=20)
         self.obj.append(ctk.CTkLabel(self.root, text='Allow Gravity:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=5, column=0, padx=20, pady=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='Gravity Acceleration:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
         self.obj[-1].grid(row=6, column=0, padx=20, pady=20)
 
+        self.obj.append(ctk.CTkButton(self.root, text='Choose Background Color', font=('Arial', 20), corner_radius=16, command=self.ask_color))
+        self.obj[-1].grid(row=0, column=1, pady=20, padx=20)
         self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5))
         self.obj[-1].grid(row=1, column=1, pady=20, padx=20)
+        self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5))
+        self.obj[-1].grid(row=2, column=1, pady=20, padx=20)
+        self.obj.append(ctk.CTkCheckBox(self.root, corner_radius=16, border_color=5))
+        self.obj[-1].grid(row=3, column=1, pady=20, padx=20)
+        self.obj.append(ctk.CTkCheckBox(self.root, corner_radius=16, border_color=5))
+        self.obj[-1].grid(row=4, column=1, pady=20, padx=20)
+        self.obj.append(ctk.CTkCheckBox(self.root, corner_radius=16, border_color=5))
+        self.obj[-1].grid(row=5, column=1, pady=20, padx=20)
+        self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5))
+        self.obj[-1].grid(row=6, column=1, pady=20, padx=20)
 
+
+
+        self.obj.append(ctk.CTkButton(self.root, text='Submit', font=('Arial', 20), corner_radius=16, command=self.submit))
+        self.obj[-1].grid(row=3, column=1, pady=20, padx=20)
+        self.obj.append(ctk.CTkButton(self.root, text='Cancel', font=('Arial', 20), corner_radius=16, command=self.cancel))
+        self.obj[-1].grid(row=3, column=0, pady=20, padx=20)
 
         self.root.mainloop()
     

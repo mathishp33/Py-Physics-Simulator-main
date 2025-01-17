@@ -28,7 +28,7 @@ class AskMaterial():
         self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5))
         self.obj[-1].grid(row=2, column=1, pady=20, padx=20)
 
-        self.obj.append(ctk.CTkButton(self.root, text='Submit', font=('Arial', 20), corner_radius=16, command=self.custom_meterial_end))
+        self.obj.append(ctk.CTkButton(self.root, text='Submit', font=('Arial', 20), corner_radius=16, command=self.submit))
         self.obj[-1].grid(row=3, column=1, pady=20, padx=20)
         self.obj.append(ctk.CTkButton(self.root, text='Cancel', font=('Arial', 20), corner_radius=16, command=self.stop))
         self.obj[-1].grid(row=3, column=0, pady=20, padx=20)
@@ -38,7 +38,7 @@ class AskMaterial():
 
         self.root.mainloop()
 
-    def custom_meterial_end(self):
+    def submit(self):
         try:
             self.density = float(self.obj[3].get())
             self.restitution = float(self.obj[4].get())
