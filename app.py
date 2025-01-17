@@ -112,7 +112,7 @@ class App:
             pg.draw.line(self.screen, (0, 0, 0), (x, y), (x + 48, y + 48), 5) if j[1] else 0
 
         x_offset =  75 + (25 + 50)*(len(self.tools)-1)
-        pg.draw.rect(self.screen, (255, 255, 255), pg.Rect())
+        #pg.draw.rect(self.screen, (255, 255, 255), pg.Rect())
         for i, j in enumerate(self.buttons):
             x, y = 25 + x_offset + (25 + 50) * i, 25
             self.screen.blit(j[0], (x, y))
@@ -123,8 +123,12 @@ class App:
                             'collision': self.collision, 'g': self.g, 'gravity': self.gravity}
                     self.external_ui = ui.App_parameters(args)
                     self.external_ui.run()
-                    self.background_color, self.FPS, self.air_density = self.external_ui.background_color.get(), self.external_ui.FPS.get(), self.external_ui.air_density.get()
-                    self.drag, self.collision, self.g, self.gravity = self.external_ui.drag.get(), self.external_ui.collision.get(), self.external_ui.g.get(), self.external_ui.gravity.get()
+                    if self.external_ui.submitted:
+                        try:
+                            self.background_color, self.FPS, self.air_density = self.external_ui.background_color, int(self.external_ui.FPS.get()), float(self.external_ui.air_density.get())
+                            self.drag, self.collision, self.g, self.gravity = self.external_ui.drag.get(), self.external_ui.collision.get(), float(self.external_ui.g.get()), self.external_ui.gravity.get()
+                        except:
+                            print('error while updating parameters')
 
     def dragging(self, index: int):
         self.interacting_ = True
