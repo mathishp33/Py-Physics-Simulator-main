@@ -111,7 +111,8 @@ class App:
 
             pg.draw.line(self.screen, (0, 0, 0), (x, y), (x + 48, y + 48), 5) if j[1] else 0
 
-        x_offset =  25 + (25 + 50)*(len(self.tools)-1)
+        x_offset =  75 + (25 + 50)*(len(self.tools)-1)
+        pg.draw.rect(self.screen, (255, 255, 255), pg.Rect())
         for i, j in enumerate(self.buttons):
             x, y = 25 + x_offset + (25 + 50) * i, 25
             self.screen.blit(j[0], (x, y))
