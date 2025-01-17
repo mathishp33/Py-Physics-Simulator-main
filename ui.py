@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from CTkColorPicker import *
+from scripts.CTkColorPicker import *
 import numpy as np
 
 class Create_Object():
@@ -16,7 +16,7 @@ class Create_Object():
         self.restitutions = {'Caoutchouc': 0.8, 'Steel': 0.8, 'Glass': 0.5, 'Stone': 0.2, 'Wood': 0.4, 'Helium': 0.3, 'Ice': 0.05, 'Gold': 0.1} 
         self.frictions = {'Caoutchouc': 0.8, 'Steel': 0.8, 'Glass': 0.5, 'Stone': 0.2, 'Wood': 0.4, 'Helium': 0.3, 'Ice': 0.05, 'Gold': 0.1}
 
-        self.args = {'material': 'Custom Material'}
+        self.args = {'material': 'Wood', 'shape': 'circle', 'vertices': 100, 'color': (0, 255, 0)}
 
     def ask_color(self):
         pick_color = AskColor()
