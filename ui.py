@@ -98,20 +98,13 @@ class Create_Object():
 
 class App_parameters:
     def __init__(self, args):
-        self.background_color = args['bg']
-        self.FPS = args['fps']
-        self.air_density = args['air_density']
-        self.drag = args['drag']
-        self.collision = args['collision']
-        self.g = args['g']
-        self.gravity = args['gravity']
-
         self.submitted = False
         self.obj = []
 
+        self.background_color = args['bg']
+
     def submit(self):
         self.submitted = True
-
         self.stop()
 
     def stop(self):
@@ -130,6 +123,13 @@ class App_parameters:
         self.root.resizable(False, False)
         ctk.set_appearance_mode('dark')
 
+        self.FPS = ctk.StringVar(value=self.args['fps'])
+        self.air_density = ctk.StringVar(value=self.args['air_density'])
+        self.drag = ctk.BooleanVar(value=self.args['drag'])
+        self.collision = ctk.BooleanVar(value=self.args['collision'])
+        self.g = ctk.StringVar(value=self.args['g'])
+        self.gravity = ctk.BooleanVar(value=self.args['gravity'])
+
         self.obj.append(ctk.CTkLabel(self.root, text='Background Color:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
         self.obj[-1].grid(row=0, column=0, padx=20, pady=20)
         self.obj.append(ctk.CTkLabel(self.root, text='Images per sec. :', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
@@ -147,17 +147,17 @@ class App_parameters:
 
         self.obj.append(ctk.CTkButton(self.root, text='Choose Background Color', font=('Arial', 20), corner_radius=16, command=self.ask_color))
         self.obj[-1].grid(row=0, column=1, pady=20, padx=20)
-        self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5))
+        self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5, textvariable=self.FPS))
         self.obj[-1].grid(row=1, column=1, pady=20, padx=20)
-        self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5))
+        self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5, textvariable=self.air_density))
         self.obj[-1].grid(row=2, column=1, pady=20, padx=20)
-        self.obj.append(ctk.CTkCheckBox(self.root, corner_radius=16, border_color=5))
+        self.obj.append(ctk.CTkCheckBox(self.root, corner_radius=16, border_color=5), self.drag)
         self.obj[-1].grid(row=3, column=1, pady=20, padx=20)
-        self.obj.append(ctk.CTkCheckBox(self.root, corner_radius=16, border_color=5))
+        self.obj.append(ctk.CTkCheckBox(self.root, corner_radius=16, border_color=5), self.collision)
         self.obj[-1].grid(row=4, column=1, pady=20, padx=20)
-        self.obj.append(ctk.CTkCheckBox(self.root, corner_radius=16, border_color=5))
+        self.obj.append(ctk.CTkCheckBox(self.root, corner_radius=16, border_color=5), self.gravity)
         self.obj[-1].grid(row=5, column=1, pady=20, padx=20)
-        self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5))
+        self.obj.append(ctk.CTkEntry(self.root, font=('Arial', 20), corner_radius=16, border_width=5), self.g)
         self.obj[-1].grid(row=6, column=1, pady=20, padx=20)
 
         self.obj.append(ctk.CTkLabel(self.root, text='s^-1', font=('Arial', 20), corner_radius=16))

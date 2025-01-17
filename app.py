@@ -117,6 +117,15 @@ class App:
             x, y = 25 + x_offset + (25 + 50) * i, 25
             self.screen.blit(j[0], (x, y))
 
+            if self.click and j[0].get_rect(topleft=(x, y)).collidepoint(self.mouse_pos) and not self.clicked:
+                if i == 0:
+                    args = {'bg': self.background_color, 'fps': self.FPS, 'air_density': self.air_density, 'drag': self.drag, 
+                            'collision': self.collision, 'g': self.g, 'gravity': self.gravity}
+                    self.external_ui = ui.App_parameters(args)
+                    self.external_ui.run()
+                    self.background_color, self.FPS, self.air_density = self.external_ui.background_color.get(), self.external_ui.FPS.get(), self.external_ui.air_density.get()
+                    self.drag, self.collision, self.g, self.gravity = self.external_ui.drag.get(), self.external_ui.collision.get(), self.external_ui.g.get(), self.external_ui.gravity.get()
+
     def dragging(self, index: int):
         self.interacting_ = True
         while self.click:
