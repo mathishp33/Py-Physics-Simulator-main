@@ -4,8 +4,6 @@ import numpy as np
 
 class Create_Object():
     def __init__(self):
-        self.width, self.height = 800, 600
-        self.title = 'Create an Object'
 
         self.obj = []
 
@@ -72,8 +70,7 @@ class Create_Object():
     def run(self):
 
         self.root = ctk.CTk()
-        self.root.title(self.title)
-        self.root.geometry(f'{self.width}x{self.height}')
+        self.root.title('Create an Object')
         self.root.resizable(False, False)
         ctk.set_appearance_mode('dark')
 
@@ -99,9 +96,41 @@ class Create_Object():
 
         self.root.mainloop()
 
+class App_parameters:
+    def __init__(self, args):
+        self.background_color = args['bg']
+        self.FPS = args['fps']
+        self.air_density = args['air_density']
+        self.drag = args['drag']
+        self.collision = args['collision']
+        self.g = args['g']
+        self.gravity = args['gravity']
 
+        self.submitted = False
+        self.obj = []
+
+    def submit(self):
+        self.submitted = True
+
+        self.stop()
+
+    def stop(self):
+        self.root.quit()
+        self.root.destroy()
+    
+    def run(self):
+        self.root = ctk.CTk()
+        self.root.title('Modify Simulation Parameters')
+        self.root.resizable(False, False)
+        ctk.set_appearance_mode('dark')
+
+        self.obj.append(ctk.CTkLabel(self.root, text='Background Color:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=0, column=0, padx=20, pady=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='Background Color:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=0, column=0, padx=20, pady=20)
+        self.obj.append(ctk.CTkLabel(self.root, text='Background Color:', font=('Arial, 20'), corner_radius=16, fg_color='white', text_color='black'))
+        self.obj[-1].grid(row=0, column=0, padx=20, pady=20)
+    
 
 if __name__ == '__main__':
-    window = Create_Object()
-    window.run()
-    print(window.args)
+    window = None

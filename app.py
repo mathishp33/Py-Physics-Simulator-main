@@ -8,14 +8,15 @@ import ui
 
 class App:
     def __init__(self):
-        self.FPS = 120
         self.WIDTH, self.HEIGHT = 1600, 900
-        self.background_color = (135, 205, 235)
         self.mouse_pos = (0, 0)
         self.click = False
         self.clicked = False
         self.font16 = pg.font.SysFont('Corbel', 16)
 
+        #simulation parameters
+        self.background_color = (135, 205, 235)
+        self.FPS = 120
         self.air_density = 1.23
         self.drag = True
         self.collision = True
