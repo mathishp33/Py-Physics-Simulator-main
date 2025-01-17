@@ -19,7 +19,7 @@ class RigidBody():
             for i in range(len(self.untouched_vertices)):
                 j=(i + 1) % len(self.untouched_vertices)
                 a += self.untouched_vertices[i][0]*self.untouched_vertices[j][1] - self.untouched_vertices[j][0]*self.untouched_vertices[i][1]
-            self.aera = 0.5*abs(a)
+            self.aera = 0.5*abs(a)**10**-4
         elif self.shape == 'circle':
             self.radius = args['vertices']
             self.width = self.radius*2 #cm

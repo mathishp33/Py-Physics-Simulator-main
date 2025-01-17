@@ -27,7 +27,11 @@ class App:
         self.tool = 'dragging'
         self.tools = [[pg.image.load('assets/drag_icon.jpg'), True, 'dragging', 'Click on an object to drag it'], 
                       [pg.image.load('assets/fix_icon.jpg'), True, 'fix', 'Click on an object to fix it'], 
-                      [pg.image.load('assets/create_icon.png'), True, 'create', 'Click on the screen where you want to add an object']]
+                      [pg.image.load('assets/create_icon.png'), True, 'create', 'Click on the screen where you want to add an object']
+                      ]
+        self.buttons = [[pg.image.load('assets/param_icon.png')]
+                        ]
+        
         self.rigid_bodies = []
 
         for object in self.rigid_bodies:
@@ -86,9 +90,9 @@ class App:
 
     def UI(self):
         pg.draw.rect(self.screen, (0, 0, 0), (0, 0, self.WIDTH, 100))
-        for i, j in enumerate(self.tools):
 
-            x, y = 25 + 25 * i + 50 * i, 25
+        for i, j in enumerate(self.tools):
+            x, y = 25 + (25 + 50)*i, 25
             self.screen.blit(j[0], (x, y))
 
             if self.click and j[0].get_rect(topleft=(x, y)).collidepoint(self.mouse_pos) and not self.clicked:
@@ -106,6 +110,12 @@ class App:
                 self.screen.blit(text, text.get_rect(bottomleft=self.mouse_pos))
 
             pg.draw.line(self.screen, (0, 0, 0), (x, y), (x + 48, y + 48), 5) if j[1] else 0
+
+        x_offset =  25 + (25 + 50)*(len(self.tools)-1)
+        for i, j in enumerate(self.buttons):
+            x, y = 25 + x_offset + (25 + 50) * i
+            self.screen
+
         
 
     def dragging(self, index: int):
