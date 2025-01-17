@@ -113,10 +113,8 @@ class App:
 
         x_offset =  25 + (25 + 50)*(len(self.tools)-1)
         for i, j in enumerate(self.buttons):
-            x, y = 25 + x_offset + (25 + 50) * i
-            self.screen
-
-        
+            x, y = 25 + x_offset + (25 + 50) * i, 25
+            self.screen.blit(j[0], (x, y))
 
     def dragging(self, index: int):
         self.interacting_ = True
