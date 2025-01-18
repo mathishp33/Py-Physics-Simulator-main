@@ -104,6 +104,11 @@ class App_parameters:
         self.background_color = args['bg']
         self.args = args
 
+        self.root = ctk.CTk()
+        self.root.title('Modify Simulation Parameters')
+        self.root.resizable(False, False)
+        ctk.set_appearance_mode('dark')
+
     def submit(self):
         self.submitted = True
         self.stop()
@@ -121,12 +126,7 @@ class App_parameters:
         color = (int(color[1:3], base=16), int(color[3:5], base=16), int(color[5:7], base=16))
         self.background_color = color
     
-    def run(self):
-        self.root = ctk.CTk()
-        self.root.title('Modify Simulation Parameters')
-        self.root.resizable(False, False)
-        ctk.set_appearance_mode('dark')
-
+    def run(self):        
         self.FPS = ctk.StringVar(value=self.args['fps'])
         self.air_density = ctk.StringVar(value=self.args['air_density'])
         self.drag = ctk.BooleanVar(value=self.args['drag'])
@@ -177,7 +177,19 @@ class App_parameters:
         self.obj[-1].grid(row=7, column=0, pady=20, padx=20)
 
         self.root.mainloop()
-    
 
 if __name__ == '__main__':
-    window = None
+    args = {
+        'bg': (0, 0, 0),
+        'fps': 60,
+        'air_density': 1.2,
+        'drag': True,
+        'collision': True,
+        'g': 9.8,
+        'gravity': True
+    }
+    app_params1 = App_parameters(args)
+    app_params1.run()    
+
+    app_params2 = App_parameters(args)
+    app_params2.run()

@@ -4,7 +4,7 @@ import time
 import threading
 from object import RigidBody, Ground
 import collision
-import ui
+from ui import App_parameters, Create_Object
 
 class App:
     def __init__(self):
@@ -13,6 +13,7 @@ class App:
         self.click = False
         self.clicked = False
         self.font16 = pg.font.SysFont('Corbel', 16)
+        self.focused = True
 
         #simulation parameters
         self.background_color = (135, 205, 235)
@@ -48,24 +49,22 @@ class App:
 
         self.running = True
         while self.running:
-            self.mouse_pos = pg.mouse.get_pos()
-            self.screen.fill(self.background_color)
+            if self.focused:
+                self.mouse_pos = pg.mouse.get_pos()
+                self.screen.fill(self.background_color)
 
-            self.clicked = True if self.click else False
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    self.running = False
-                if event.type == pg.MOUSEBUTTONDOWN:
-                    self.click = True
-                if event.type == pg.MOUSEBUTTONUP:
-                    self.click = False
+                self.clicked = True if self.click else False
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        self.running = False
+                self.click = pg.mouse.get_pressed()[0]
 
-            self.update()
-            self.UI()
-            self.interact()
+                self.update()
+                self.UI()
+                self.interact()
 
-            pg.display.flip()
-            pg.display.set_caption('Py-Physics Simulator  |  ' + str(round(self.clock.get_fps())))
+                pg.display.flip()
+                pg.display.set_caption('Py-Physics Simulator  |  ' + str(round(self.clock.get_fps())))
             self.clock.tick(self.FPS)
 
     def interact(self):
@@ -82,7 +81,7 @@ class App:
                                 object.fix(True if not object.fixed else False)
                     if self.tool == 'create':
                         x, y = self.mouse_pos
-                        self.external_ui = ui.Create_Object()
+                        self.external_ui = Create_Object()
                         self.external_ui.run()
                         args = self.external_ui.args
                         if not args == 'cancel':
@@ -121,14 +120,16 @@ class App:
                 if i == 0:
                     args = {'bg': self.background_color, 'fps': self.FPS, 'air_density': self.air_density, 'drag': self.drag, 
                             'collision': self.collision, 'g': self.g, 'gravity': self.gravity}
-                    self.external_ui = ui.App_parameters(args)
+                    self.external_ui = App_parameters(args)
                     self.external_ui.run()
+
                     if self.external_ui.submitted:
                         try:
                             self.background_color, self.FPS, self.air_density = self.external_ui.background_color, int(self.external_ui.FPS.get()), float(self.external_ui.air_density.get())
                             self.drag, self.collision, self.g, self.gravity = self.external_ui.drag.get(), self.external_ui.collision.get(), float(self.external_ui.g.get()), self.external_ui.gravity.get()
                         except:
                             print('error while updating parameters')
+                    del self.external_ui
 
     def dragging(self, index: int):
         self.interacting_ = True

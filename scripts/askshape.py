@@ -116,7 +116,7 @@ class AskShape():
 
     def stop(self):
         self.root.quit()
-        self.root.after(100, self.root.destroy)
+        self.root.destroy()
 
     def draw_shape(self):
         self.root = ctk.CTk()
