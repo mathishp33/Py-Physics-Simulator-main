@@ -85,6 +85,8 @@ class Button:
         self.Text = self.font.render(self.text, True, (255, 255, 255))
         self.rect = self.Text.get_rect(topleft=(self.x, self.y))
 
+        self.state = False
+
     def get(self):
         return self.text
     
@@ -92,13 +94,15 @@ class Button:
         self.Text = self.font.render(self.text, True, (255, 255, 255), (100, 100, 100) if args[0] else None)
         self.rect = self.Text.get_rect(topleft=(self.x, self.y))
 
-        if self.command != None:
-            try:
-                if args[0] and args[1]:
+        self.state = False
+        try:
+            if args[0] and args[1]:
+                self.state = True
+                if self.command != None:
                     func = getattr(self.command[0], self.command[1])
                     return func(self.command[2]) 
-            except:
-                print('error occured while calling a function')
+        except:
+            print('error occured while calling a function')
 
         return self.Text, self.rect
 
@@ -135,6 +139,9 @@ class Checkbox:
 
     def get(self):
         return self.content
+    
+    def update(self):
+        
     
 if __name__ == '__main__':
     screen = pg.display.set_mode((1000, 500))
