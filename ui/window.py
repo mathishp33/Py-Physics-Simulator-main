@@ -4,6 +4,7 @@ import pygame as pg
 class Window:
     def __init__(self, RES: tuple = (400, 400), title: str = 'Window'):
         self.WIDTH, self.HEIGHT = self.RES = RES
+        self.x, self.y = 0, 0
         self.title = title
 
         pg.font.init()
@@ -18,7 +19,7 @@ class Window:
         self.widgets.append(Label(text, x, y))
         return len(self.widgets)-1
     
-    def button(self, text: str= '', x: int = 0, y: int = 0, command: str = '') -> int:
+    def button(self, text: str= '', x: int = 0, y: int = 0, command: tuple = None) -> int:
         self.widgets.append(Button(text, x, y, command))
         return len(self.widgets)-1
 
@@ -57,7 +58,7 @@ class Window:
         except:
             print('error occured while deleting object')
     
-    def update(self, mouse_pos, click):
+    def update(self, mouse_pos, click, pos):
         self.surface.fill((25, 25, 25))
 
         title = self.font30.render(self.title, True, (255, 255, 255), (50 ,50, 50))
@@ -65,7 +66,7 @@ class Window:
         self.surface.blit(title, title_rect)
 
         for i in self.widgets:
-            content, rect = i.update(None)
+            content, rect = i.update((True if i.rect.collidepoint((mouse_pos[0]-pos[0], mouse_pos[1]-pos[1])) else False, click))
             self.surface.blit(content, rect)
 
         for i, j in self.variables:
@@ -79,9 +80,27 @@ class Button:
         self.text = text
         self.x, self.y = x, y
         self.command = command
+        self.font = pg.font.SysFont('Corbel', 16)
+
+        self.Text = self.font.render(self.text, True, (255, 255, 255))
+        self.rect = self.Text.get_rect(topleft=(self.x, self.y))
 
     def get(self):
         return self.text
+    
+    def update(self, args):
+        self.Text = self.font.render(self.text, True, (255, 255, 255), (100, 100, 100) if args[0] else None)
+        self.rect = self.Text.get_rect(topleft=(self.x, self.y))
+
+        if self.command != None:
+            try:
+                if args[0] and args[1]:
+                    func = getattr(self.command[0], self.command[1])
+                    return func(self.command[2]) 
+            except:
+                print('error occured while calling a function')
+
+        return self.Text, self.rect
 
 
 class Label:
@@ -97,9 +116,6 @@ class Label:
         return self.text
     
     def update(self, args):
-        self.Text = self.font.render(self.text, True, (255, 255, 255), (25, 25, 25))
-        self.rect = self.Text.get_rect(topleft=(self.x, self.y))
-
         return self.Text, self.rect
 
 
@@ -124,13 +140,14 @@ if __name__ == '__main__':
     screen = pg.display.set_mode((1000, 500))
 
     window = Window()
-    window.label('hello world', 100, 100)
+    window.button('hello world', 100, 100)
     running = True
     while running:
         screen.fill((200, 0, 0))
+        mouse_pos = pg.mouse.get_pos()
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
 
-        screen.blit(window.update(0, 0), (10, 10))
+        screen.blit(window.update(mouse_pos, 0, (10, 10)), (10, 10))
         pg.display.flip()
