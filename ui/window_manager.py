@@ -6,7 +6,6 @@ class WindowManager:
         self.clicked = False
         self.running = True
         self.mouse_pos = (0, 0)
-        self.pressed_keys = []
         self.clock = pg.time.Clock()
 
         self.window = window
@@ -19,7 +18,6 @@ class WindowManager:
             self.clicked = True if not self.click else False
             self.click = pg.mouse.get_pressed()[0]
             self.mouse_pos = pg.mouse.get_pos()
-            self.pressed_keys = pg.key.get_pressed()
 
             self.running = self.window.running
             self.x, self.y = self.window.x, self.window.y

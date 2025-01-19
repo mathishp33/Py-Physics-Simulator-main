@@ -77,7 +77,7 @@ class Window:
         if close_rect.collidepoint(self.surf_mouse_pos) and click:
             self.running = False
     
-    def update(self, mouse_pos: tuple, click: bool, pos: tuple, keys, clicked: bool):
+    def update(self, mouse_pos: tuple, click: bool, pos: tuple, events, clicked: bool):
         self.surface.fill((25, 25, 25))
 
         self.surf_mouse_pos = (mouse_pos[0]-pos[0], mouse_pos[1]-pos[1])
@@ -86,7 +86,7 @@ class Window:
 
         for i in self.widgets:
             content, rect = i.update((True if i.rect.collidepoint(self.surf_mouse_pos) else False,
-                                       click, keys))
+                                       click, clicked, events))
             self.surface.blit(content, rect)
 
         for i, j in self.variables:
@@ -118,7 +118,7 @@ class Button:
 
         self.state = False
         try:
-            if args[0] and args[1]:
+            if args[0] and args[1] and not args[2]:
                 self.state = True
                 if self.command != None:
                     func = getattr(self.command[0], self.command[1])
@@ -149,9 +149,49 @@ class Entry:
     def __init__(self, x, y, var, width):
         self.x, self.y = x, y
         self.content = var
+        self.width = width
+        
+        self.focus_counter = 0
+        self.focus = False
+        self.new_content = self.content
+        self.font = pg.font.SysFont('Corbel', 16)
+        self.rect = pg.Rect(self.x, self.y, self.width, 20)
+
+        self.surf = pg.Surface((self.width, 20))
+        self.surf.fill((100, 100, 100))
+        self.text = self.font.render(self.new_content, True, (255, 255, 255), (100, 100, 100))
+        self.text_rect = self.text.get_rect(topleft=(0, 0))
+        self.surf.blit(self.text, self.text_rect)
 
     def get(self):
         return self.content
+
+    def update(self, args):
+        if args[0] and args[1] and not args[2]:
+            self.focus = True
+        elif args[1] and not args[2]:
+            self.focus = False
+
+        self.new_content = self.content
+        if self.focus:
+            for event in args[3]:
+                if not event.type == pg.K_RETURN:
+                    try:
+                        self.content = self.content + event.unicode
+                    except:
+                        print('error occured while adding letter to an entry')
+                if event.type == pg.K_BACKSPACE:
+                    self.content = self.content[:-1]
+
+            self.focus_counter += 0.005
+            self.new_content += '|' if int(self.focus_counter)%2 == 0 else ''
+
+        self.surf.fill((100, 100, 100))
+        self.text = self.font.render(self.new_content, True, (255, 255, 255), (100, 100, 100))
+        self.text_rect = self.text.get_rect(topleft=(0, 0))
+        self.surf.blit(self.text, self.text_rect)
+
+        return self.surf, (self.x, self.y)
 
 
 class Checkbox:
@@ -175,7 +215,7 @@ class Checkbox:
         self.surf.fill((255 , 255, 255))
         self.rect = pg.Rect(self.x, self.x, 20, 20)
 
-        if args[0] and args[1]:
+        if args[0] and args[1] and not args[2]:
             self.content = True if not self.content else False
 
         if self.content:
@@ -191,15 +231,17 @@ if __name__ == '__main__':
     window = Window()
     window.button('hello world', 100, 100)
     window.checkbox(200, 200)
+    window.entry(200, 350)
 
     click = False
     running = True
+    keys = []
     while running:
         screen.fill((200, 0, 0))
         mouse_pos = pg.mouse.get_pos()
+        keys = []
         clicked = True if click else False
         click = pg.mouse.get_pressed()[0]
-        keys = pg.key.get_pressed()
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
