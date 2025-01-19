@@ -1,5 +1,6 @@
 import pygame as pg
 import threading
+from pygame.locals import *
 
 class Window:
     def __init__(self, RES: tuple = (400, 400), title: str = 'Window'):
@@ -151,6 +152,11 @@ class Entry:
         self.content = var
         self.width = width
         
+        self.keys = {pg.K_BACKSPACE: 'backspace', pg.K_RETURN: , pg.K_ESCAPE, pg.K_0, pg.K_1, pg.K_2, pg.K_3, pg.K_4, pg.K_5, pg.K_6, 
+                     pg.K_7, pg.K_8, pg.K_9, pg.K_a, pg.K_b, pg.K_c, pg.K_d, pg.K_e, pg.K_f, pg.K_g, pg.K_h, pg.K_i, 
+                     pg.K_j, pg.K_k, pg.K_l, pg.K_m, pg.K_n, pg.K_o, pg.K_p, pg.K_q, pg.K_r, pg.K_s, pg.K_t, pg.K_u, 
+                     pg.K_v, pg.K_w, pg.K_x, pg.K_y, pg.K_z, pg.K_DELETE, pg.K_KP0, pg.K_KP1, pg.K_KP2, pg.K_KP3, pg.K_KP4, pg.K_KP5, 
+                     pg.K_KP6, pg.K_KP7, pg.K_KP8, pg.K_KP9}
         self.focus_counter = 0
         self.focus = False
         self.thread0 = None
@@ -175,9 +181,16 @@ class Entry:
 
         self.new_content = self.content
         if self.focus:
+            pressed_keys = pg.key.get_pressed()
+            """
             if self.thread0 == None:
                 self.thread0 = threading.Thread(target=self.get_intput)
                 self.thread0.start()
+            """
+            for i, j in enumerate(self.keys):
+                if pressed_keys[j]:
+                    if 
+
 
             self.focus_counter += 0.005
             self.new_content += '|' if int(self.focus_counter)%2 == 0 else ''
@@ -191,11 +204,12 @@ class Entry:
         self.surf.blit(self.text, self.text_rect)
 
         return self.surf, (self.x, self.y)
-
+"""
     def get_intput(self):
         while self.focus:
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
+                    print('hello')
                     if not event.type == pg.K_RETURN:
                         try:
                             self.content = self.content + event.unicode
@@ -203,6 +217,7 @@ class Entry:
                             print('error occured while adding letter to an entry')
                     if event.type == pg.K_BACKSPACE:
                         self.content = self.content[:-1]
+"""
 
 
 class Checkbox:
