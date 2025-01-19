@@ -1,5 +1,5 @@
 import pygame as pg
-
+import threading
 
 class Window:
     def __init__(self, RES: tuple = (400, 400), title: str = 'Window'):
@@ -77,7 +77,7 @@ class Window:
         if close_rect.collidepoint(self.surf_mouse_pos) and click:
             self.running = False
     
-    def update(self, mouse_pos: tuple, click: bool, pos: tuple, events, clicked: bool):
+    def update(self, mouse_pos: tuple, click: bool, pos: tuple, clicked: bool):
         self.surface.fill((25, 25, 25))
 
         self.surf_mouse_pos = (mouse_pos[0]-pos[0], mouse_pos[1]-pos[1])
@@ -86,7 +86,7 @@ class Window:
 
         for i in self.widgets:
             content, rect = i.update((True if i.rect.collidepoint(self.surf_mouse_pos) else False,
-                                       click, clicked, events))
+                                       click, clicked))
             self.surface.blit(content, rect)
 
         for i, j in self.variables:
@@ -153,6 +153,7 @@ class Entry:
         
         self.focus_counter = 0
         self.focus = False
+        self.thread0 = None
         self.new_content = self.content
         self.font = pg.font.SysFont('Corbel', 16)
         self.rect = pg.Rect(self.x, self.y, self.width, 20)
@@ -174,17 +175,15 @@ class Entry:
 
         self.new_content = self.content
         if self.focus:
-            for event in args[3]:
-                if not event.type == pg.K_RETURN:
-                    try:
-                        self.content = self.content + event.unicode
-                    except:
-                        print('error occured while adding letter to an entry')
-                if event.type == pg.K_BACKSPACE:
-                    self.content = self.content[:-1]
+            if self.thread0 == None:
+                self.thread0 = threading.Thread(target=self.get_intput)
+                self.thread0.start()
 
             self.focus_counter += 0.005
             self.new_content += '|' if int(self.focus_counter)%2 == 0 else ''
+
+        else:
+            self.thread0 = None
 
         self.surf.fill((100, 100, 100))
         self.text = self.font.render(self.new_content, True, (255, 255, 255), (100, 100, 100))
@@ -192,6 +191,18 @@ class Entry:
         self.surf.blit(self.text, self.text_rect)
 
         return self.surf, (self.x, self.y)
+
+    def get_intput(self):
+        while self.focus:
+            for event in pg.event.get():
+                if event.type == pg.KEYDOWN:
+                    if not event.type == pg.K_RETURN:
+                        try:
+                            self.content = self.content + event.unicode
+                        except:
+                            print('error occured while adding letter to an entry')
+                    if event.type == pg.K_BACKSPACE:
+                        self.content = self.content[:-1]
 
 
 class Checkbox:
@@ -233,13 +244,12 @@ if __name__ == '__main__':
     window.checkbox(200, 200)
     window.entry(200, 350)
 
+    clock = pg.time.Clock()
     click = False
     running = True
-    keys = []
     while running:
         screen.fill((200, 0, 0))
         mouse_pos = pg.mouse.get_pos()
-        keys = []
         clicked = True if click else False
         click = pg.mouse.get_pressed()[0]
 
@@ -250,5 +260,6 @@ if __name__ == '__main__':
             running = False
 
         x, y = window.x, window.y
-        screen.blit(window.update(mouse_pos, click, (x, y), keys, clicked), (x, y))
+        screen.blit(window.update(mouse_pos, click, (x, y), clicked), (x, y))
         pg.display.flip()
+        clock.tick(180)
