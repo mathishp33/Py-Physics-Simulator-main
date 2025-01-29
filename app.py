@@ -1,10 +1,13 @@
 import numpy as np
 import pygame as pg
+from pygame.locals import *
 import time
 import threading
 from object import RigidBody, Ground
 import collision
-from ui import App_parameters, Create_Object
+#remove line 9 keep line 10
+from garbage.ui import App_parameters, Create_Object
+from ui import Parameters
 
 class App:
     def __init__(self):
@@ -120,9 +123,10 @@ class App:
                 if i == 0:
                     args = {'bg': self.background_color, 'fps': self.FPS, 'air_density': self.air_density, 'drag': self.drag, 
                             'collision': self.collision, 'g': self.g, 'gravity': self.gravity}
-                    self.external_ui = App_parameters(args)
-                    self.external_ui.run()
 
+                    self.external_ui = Parameters(args)
+                    self.external_ui.run()
+                    
                     if self.external_ui.submitted:
                         try:
                             self.background_color, self.FPS, self.air_density = self.external_ui.background_color, int(self.external_ui.FPS.get()), float(self.external_ui.air_density.get())
