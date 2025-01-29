@@ -1,7 +1,7 @@
 import pygame as pg
 
 class WindowManager:
-    def __init__(self, window):
+    def __init__(self, window, x: int = 0, y: int = 0):
         self.click = False
         self.clicked = False
         self.running = True

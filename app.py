@@ -35,6 +35,7 @@ class App:
                       ]
         self.buttons = [[pg.image.load('assets/param_icon.png')]
                         ]
+        self.screens = []
         
         self.rigid_bodies = []
 
@@ -93,6 +94,9 @@ class App:
     def UI(self):
         pg.draw.rect(self.screen, (0, 0, 0), (0, 0, self.WIDTH, 100))
 
+        for screen in self.screens:
+            screen.update()
+
         for i, j in enumerate(self.tools):
             x, y = 25 + (25 + 50)*i, 25
             self.screen.blit(j[0], (x, y))
@@ -126,7 +130,9 @@ class App:
 
                     self.external_ui = Parameters(args)
                     self.external_ui.run()
+                    self.screens.append(self.external_ui)
                     
+                    """
                     if self.external_ui.submitted:
                         try:
                             self.background_color, self.FPS, self.air_density = self.external_ui.background_color, int(self.external_ui.FPS.get()), float(self.external_ui.air_density.get())
@@ -134,6 +140,7 @@ class App:
                         except:
                             print('error while updating parameters')
                     del self.external_ui
+                    """
 
     def dragging(self, index: int):
         self.interacting_ = True
